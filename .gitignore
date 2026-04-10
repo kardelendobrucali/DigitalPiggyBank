@@ -1,207 +1,230 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[codz]
-*$py.class
+import time
+import math
+import os
+import random
 
-# C extensions
-*.so
+os.system('')
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+PINK = '\033[95m'
+CYAN = '\033[96m'
+GREEN = '\033[92m'
+YELLOW = '\033[93m'
+RED = '\033[91m'
+PURPLE = '\033[94m'
+RESET = '\033[0m'
+BOLD = '\033[1m'
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
+O = " " * 15
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+PIGGY_LOGO = f"""
+{O}          {YELLOW}✨  🪙   ✨{RESET}
+{O}             {YELLOW}\\{RESET}
+{O}       {PINK}  _._ _..._ .-{RESET}
+{O}       {PINK} /   _{CYAN}O{PINK}    {CYAN}O{PINK} \\{RESET}      {BOLD}📱 DIGITAL {PINK}PIGGY{RESET} {BOLD}BANK 📱{RESET}
+{O}       {PINK} |  ( {RED}o o{PINK} )  |{RESET}
+{O}       {PINK} \\   '---'   /{RESET}       "Your sweetest companion
+{O}       {PINK}  '._       _'{RESET}        on the path to your dreams!"
+{O}       {PINK}    /'-----'\\{RESET}
+{O}       {PINK}   //       \\\\{RESET}
+"""
 
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py.cover
-.hypothesis/
-.pytest_cache/
-cover/
+CUP_LOGO = f"""
+{O}       {YELLOW} .-========-. {RESET}
+{O}       {YELLOW} \\'-======-'/ {RESET}   {GREEN}🎉 INCREDIBLE SUCCESS! 🎉{RESET}
+{O}       {YELLOW} _|   .=.   |_ {RESET}   You reached your goal. Time to
+{O}       {YELLOW}((|  {{1}}  |)) {RESET}   turn your dreams into reality!
+{O}       {YELLOW} \\|   /|\\   |/ {RESET}
+{O}       {YELLOW}  \\__ '`' __/  {RESET}
+{O}       {YELLOW}    _`) (`_    {RESET}
+{O}       {YELLOW}  _/_______\\_  {RESET}
+{O}       {YELLOW} /___________\\ {RESET}
+"""
 
-# Translations
-*.mo
-*.pot
+MOTIVATIONAL_QUOTES = [
+    "Future you will thank present you!",
+    "Small steps help you climb big mountains.",
+    "Every penny you save today is your freedom tomorrow.",
+    "Wealth is not how much you earn, but how much you keep.",
+    "Don't give up! You are closer to your dreams than you think.",
+    "Every drop makes an ocean, every penny makes a dream."
+]
 
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
+class PersonalFinanceAssistant:
+    def __init__(self, goal_name, target_amount, monthly_income, monthly_expense):
+        self.goal_name = goal_name
+        self.target_amount = target_amount
+        self.monthly_income = monthly_income
+        self.monthly_expense = monthly_expense
+        self.current_balance = 0.0
+        self.deposit_history = []
+        self.savings_capacity = max(0, self.monthly_income - self.monthly_expense)
 
-# Flask stuff:
-instance/
-.webassets-cache
+    def send_motivation(self):
+        quote = random.choice(MOTIVATIONAL_QUOTES)
+        print(f"\n{O}{PURPLE}✨ PIGGY SAYS: \"{quote}\"{RESET}")
 
-# Scrapy stuff:
-.scrapy
+    def deposit_money(self, amount):
+        old_percentage = (self.current_balance / self.target_amount) * 100 if self.target_amount > 0 else 0
+        self.current_balance += amount
+        self.deposit_history.append(amount)
+        new_percentage = (self.current_balance / self.target_amount) * 100 if self.target_amount > 0 else 0
 
-# Sphinx documentation
-docs/_build/
+        print(f"\n{O}{YELLOW}💰 Shaking the piggy bank and dropping money...{RESET}")
+        time.sleep(1)
+        print(f"{O}{GREEN}✅ TRANSACTION SUCCESSFUL! {amount:,.2f} TL added to your piggy bank.{RESET}")
+        
+        if new_percentage >= 100 and old_percentage < 100:
+            print(f"\n{CUP_LOGO}")
+        elif new_percentage >= 75 and old_percentage < 75:
+            print(f"\n{O}{CYAN}🔥 AWESOME! You completed 75% of the way. Very close!{RESET}")
+        elif new_percentage >= 50 and old_percentage < 50:
+            print(f"\n{O}{CYAN}🌟 HALFWAY THERE! You are doing great.{RESET}")
+        elif new_percentage >= 25 and old_percentage < 25:
+            print(f"\n{O}{CYAN}👍 FIRST QUARTER DONE! That's true determination.{RESET}")
 
-# PyBuilder
-.pybuilder/
-target/
+        if amount > self.savings_capacity:
+            print(f"\n{O}{YELLOW}⚠️ Piggy Warns: You exceeded your safe savings capacity.")
+            print(f"{O}Going fast is good, but please don't shake up your budget!{RESET}")
+        
+        time.sleep(1)
+        self.send_motivation()
 
-# Jupyter Notebook
-.ipynb_checkpoints
+    def draw_progress_bar(self):
+        if self.target_amount == 0: return "[          ] 0.00%"
+        percentage = (self.current_balance / self.target_amount) * 100
+        if percentage > 100: percentage = 100
+        
+        filled_part = int(20 * percentage // 100)
+        empty_part = 20 - filled_part
+        bar = f"{GREEN}{'█' * filled_part}{RESET}{'░' * empty_part}"
+        
+        return f"[{bar}] {percentage:.2f}%"
 
-# IPython
-profile_default/
-ipython_config.py
+    def run_financial_analysis(self):
+        print("\n" + O + "="*65)
+        print(f"{O}{YELLOW}💡 PIGGY AI FINANCIAL COACH 💡{RESET}")
+        print(O + "="*65)
+        remaining_amount = max(0, self.target_amount - self.current_balance)
+        
+        if remaining_amount == 0:
+            print(f"{O}{GREEN}Goal reached! Piggy is proud of you.{RESET}")
+            return
 
-# pyenv
-#   For a library or package, you might want to ignore these files since the code is
-#   intended to run in multiple environments; otherwise, check them in:
-# .python-version
+        print(f"{O}🎯 Your Goal: {BOLD}{self.goal_name}{RESET}")
+        print(f"{O}📉 Remaining Amount to Climb: {remaining_amount:,.2f} TL")
+        
+        if self.savings_capacity <= 0:
+            print(f"\n{O}{RED}⚠️ Piggy is Sad: Your expenses are equal to or greater than your income.")
+            print(f"{O}Please create a small savings space by cutting your expenses first.{RESET}")
+        else:
+            estimated_months = math.ceil(remaining_amount / self.savings_capacity)
+            print(f"{O}💼 Your Monthly Safe Savings Power: {self.savings_capacity:,.2f} TL")
+            print(f"\n{O}{CYAN}👉 PIGGY'S PREDICTION:{RESET} If you continue with this discipline,")
+            print(f"{O}in exactly {BOLD}{GREEN}{estimated_months} months{RESET}, '{self.goal_name}' will be yours!")
+            
+        print(O + "="*65)
+        self.send_motivation()
 
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-#Pipfile.lock
+    def show_dashboard(self):
+        remaining_amount = max(0, self.target_amount - self.current_balance)
+        percentage = (self.current_balance / self.target_amount) * 100
+        
+        print("\n" + O + "★"*65)
+        
+        if percentage >= 100:
+            print(CUP_LOGO)
+        else:
+            print(PIGGY_LOGO)
+            
+        print(O + "★"*65)
+        print(f"{O}💳 Monthly Net Income : {GREEN}{self.monthly_income:,.2f} TL{RESET}")
+        print(f"{O}💸 Monthly Expenses   : {RED}{self.monthly_expense:,.2f} TL{RESET}")
+        print(f"{O}🛡️  Savings Power      : {CYAN}{self.savings_capacity:,.2f} TL / Month{RESET}")
+        print(O + "-" * 65)
+        print(f"{O}🎯 Goal Name          : {BOLD}{self.goal_name}{RESET}")
+        print(f"{O}💰 Target Amount      : {self.target_amount:,.2f} TL")
+        print(f"{O}💵 Money in Piggy     : {GREEN}{self.current_balance:,.2f} TL{RESET}")
+        print(f"{O}📉 Remaining Amount   : {YELLOW}{remaining_amount:,.2f} TL{RESET}")
+        print("\n" + O + "  " + self.draw_progress_bar())
+        print(O + "★"*65)
 
-# UV
-#   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#uv.lock
+try:
+    print("\n" + O + "#"*65)
+    print(PIGGY_LOGO)
+    print(O + "#"*65)
+    print(f"\n{O}Hi! I am Piggy, your personal digital piggy bank.")
+    print(f"{O}Tell me your goal, and let's handle the rest together!\n")
 
-# poetry
-#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-#poetry.lock
-#poetry.toml
+    goal_name = input(f"{O}STEP 1: What is that incredibly exciting goal? (e.g., Motorcycle, Vacation): ")
 
-# pdm
-#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
-#   pdm recommends including project-wide configuration in pdm.toml, but excluding .pdm-python.
-#   https://pdm-project.org/en/latest/usage/project/#working-with-version-control
-#pdm.lock
-#pdm.toml
-.pdm-python
-.pdm-build/
+    while True:
+        try:
+            target_amount = float(input(f"{O}STEP 2: Oh, great idea! How much total money do we need for '{goal_name}'?: "))
+            if target_amount <= 0:
+                print(f"{O}{RED}❌ Amount must be greater than 0.{RESET}")
+                continue
+            break
+        except ValueError:
+            print(f"{O}{RED}❌ ERROR: Please enter numbers only!{RESET}")
 
-# pixi
-#   Similar to Pipfile.lock, it is generally recommended to include pixi.lock in version control.
-#pixi.lock
-#   Pixi creates a virtual environment in the .pixi directory, just like venv module creates one
-#   in the .venv directory. It is recommended not to include this directory in version control.
-.pixi
+    while True:
+        try:
+            monthly_income = float(input(f"{O}STEP 3: For me to draw a complete strategy, what is your monthly net income?: "))
+            if monthly_income <= 0:
+                print(f"{O}{RED}❌ Income must be greater than 0.{RESET}")
+                continue
+            break
+        except ValueError:
+            print(f"{O}{RED}❌ ERROR: Please enter numbers only!{RESET}")
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
-__pypackages__/
+    while True:
+        try:
+            monthly_expense = float(input(f"{O}STEP 4: Lastly, what are your total mandatory monthly expenses?: "))
+            if monthly_expense < 0:
+                print(f"{O}{RED}❌ Expenses cannot be negative.{RESET}")
+                continue
+            break
+        except ValueError:
+            print(f"{O}{RED}❌ ERROR: Please enter numbers only!{RESET}")
 
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
+    print(f"\n{O}{GREEN}✨ Supersonic! Data processed. Piggy is ready for you!{RESET}")
+    time.sleep(1.5)
 
-# SageMath parsed files
-*.sage.py
+    piggy_bank = PersonalFinanceAssistant(goal_name, target_amount, monthly_income, monthly_expense)
 
-# Environments
-.env
-.envrc
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+    while True:
+        print("\n" + O + "-"*40)
+        print(f"{O}         {BOLD}PIGGY CONTROL CENTER{RESET}")
+        print(O + "-"*40)
+        print(f"{O}{PINK}1{RESET} ➔ 📊 Piggy Dashboard")
+        print(f"{O}{PINK}2{RESET} ➔ 💸 Deposit Money")
+        print(f"{O}{PINK}3{RESET} ➔ 💡 Piggy's Future Prediction")
+        print(f"{O}{PINK}0{RESET} ➔ 🚪 Secure Exit")
+        print(O + "-"*40)
+        
+        choice = input(f"{O}What would you like to do? (0/1/2/3): ")
+        
+        if choice == '1':
+            piggy_bank.show_dashboard()
+        elif choice == '2':
+            print(f"\n{O}--- DEPOSIT TRANSACTION ---")
+            try:
+                amount = float(input(f"{O}How much are you putting in Piggy today? (TL): "))
+                if amount > 0:
+                    piggy_bank.deposit_money(amount)
+                else:
+                    print(f"{O}{RED}❌ ERROR: Please enter an amount greater than 0.{RESET}")
+            except ValueError:
+                print(f"{O}{RED}❌ ERROR: Please enter numbers only!{RESET}")
+        elif choice == '3':
+            piggy_bank.run_financial_analysis()
+        elif choice == '0':
+            print(f"\n{O}👋 Thank you for choosing Digital Piggy Bank. Keep saving!")
+            break
+        else:
+            print(f"\n{O}{RED}❌ Piggy didn't understand this: Please enter 0, 1, 2, or 3 only.{RESET}")
 
-# Spyder project settings
-.spyderproject
-.spyproject
+except Exception as e:
+    print(f"\n{O}{RED}❌ A system error occurred: {e}{RESET}")
 
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
-
-# pytype static type analyzer
-.pytype/
-
-# Cython debug symbols
-cython_debug/
-
-# PyCharm
-#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
-#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
-#  and can be added to the global gitignore or merged into this file.  For a more nuclear
-#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
-#.idea/
-
-# Abstra
-# Abstra is an AI-powered process automation framework.
-# Ignore directories containing user credentials, local state, and settings.
-# Learn more at https://abstra.io/docs
-.abstra/
-
-# Visual Studio Code
-#  Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore 
-#  that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
-#  and can be added to the global gitignore or merged into this file. However, if you prefer, 
-#  you could uncomment the following to ignore the entire vscode folder
-# .vscode/
-
-# Ruff stuff:
-.ruff_cache/
-
-# PyPI configuration file
-.pypirc
-
-# Cursor
-#  Cursor is an AI-powered code editor. `.cursorignore` specifies files/directories to
-#  exclude from AI features like autocomplete and code analysis. Recommended for sensitive data
-#  refer to https://docs.cursor.com/context/ignore-files
-.cursorignore
-.cursorindexingignore
-
-# Marimo
-marimo/_static/
-marimo/_lsp/
-__marimo__/
+input(f"\n{O}Press Enter to close the window...")
